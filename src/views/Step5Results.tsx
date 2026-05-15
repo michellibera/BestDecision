@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAhpStore } from '../store/useAhpStore';
 import { computePriorities, buildMatrix, aggregate, analyzeSensitivity } from '../lib/ahp';
 import { useT } from '../i18n/I18nContext';
+import { useBreakpoint } from '../hooks/useBreakpoint';
 
 const ALT_COLORS = [
   'oklch(0.92 0.06 60)',
@@ -18,6 +19,7 @@ export function Step5Results() {
   const navigate = useNavigate();
   const { criteria, alternatives, criteriaComparisons, altComparisons, reset } = useAhpStore();
   const { t } = useT();
+  const { isMobile } = useBreakpoint();
 
   const results = useMemo(() => {
     if (criteria.length < 2 || alternatives.length < 2) return null;
@@ -42,7 +44,7 @@ export function Step5Results() {
 
   if (!results) {
     return (
-      <div style={{ flex: 1, overflow: 'auto', padding: '36px 56px' }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: isMobile ? '20px 16px' : '36px 56px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', paddingTop: 60, textAlign: 'center' }}>
           <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-ink)' }}>{t('s5NotEnough')}</h2>
           <p style={{ color: 'var(--color-sub)' }}>{t('s5CompleteStep4')}</p>
@@ -72,7 +74,7 @@ export function Step5Results() {
   }));
 
   return (
-    <div style={{ flex: 1, overflow: 'auto', padding: '36px 56px', minHeight: 0 }}>
+    <div style={{ flex: 1, overflow: 'auto', padding: isMobile ? '20px 16px' : '36px 56px', minHeight: 0 }}>
       {/* Header */}
       <div style={{
         display: 'flex', justifyContent: 'space-between',
@@ -112,7 +114,7 @@ export function Step5Results() {
       {/* Result cards (2fr 1fr 1fr) */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: final.length === 1 ? '1fr' : final.length === 2 ? '2fr 1fr' : '2fr 1fr 1fr',
+        gridTemplateColumns: isMobile ? '1fr' : (final.length === 1 ? '1fr' : final.length === 2 ? '2fr 1fr' : '2fr 1fr 1fr'),
         gap: 14, marginBottom: 28,
       }}>
         {final.slice(0, 3).map(({ idx, alt, score }, i) => {
@@ -191,7 +193,7 @@ export function Step5Results() {
       </div>
 
       {/* Two-column: breakdown + right panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.6fr 1fr', gap: 20 }}>
         {/* Score breakdown */}
         <div style={{
           background: 'var(--color-surface)', border: '1px solid var(--color-rule)',

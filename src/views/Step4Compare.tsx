@@ -4,6 +4,7 @@ import { useAhpStore } from '../store/useAhpStore';
 import { SaatySlider } from '../design-system';
 import { computePriorities, buildMatrix, aggregate, findMostInconsistentPair, sliderToSaaty, saatyToSlider } from '../lib/ahp';
 import { useT } from '../i18n/I18nContext';
+import { useBreakpoint } from '../hooks/useBreakpoint';
 
 type CompareMode = 'criteria' | 'alternatives';
 
@@ -19,6 +20,7 @@ export function Step4Compare() {
   const navigate = useNavigate();
   const { criteria, alternatives, criteriaComparisons, altComparisons, setCriteriaComparison, setAltComparison } = useAhpStore();
   const { t } = useT();
+  const { isMobile } = useBreakpoint();
 
   const [mode, setMode] = useState<CompareMode>('criteria');
   const [critPairIdx, setCritPairIdx] = useState(0);
@@ -168,9 +170,14 @@ export function Step4Compare() {
     : t('s4ForCriterion', { criterion: criteria[altCritIdx]?.label ?? '', done: donePairs + 1, total: totalPairs });
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', flex: 1, minHeight: 0 }}>
+    <div style={{
+      display: isMobile ? 'flex' : 'grid',
+      flexDirection: isMobile ? 'column' : undefined,
+      gridTemplateColumns: isMobile ? undefined : '1fr 320px',
+      flex: 1, minHeight: 0,
+    }}>
       {/* Main content */}
-      <div style={{ overflow: 'auto', padding: '36px 28px' }}>
+      <div style={{ overflow: 'auto', padding: isMobile ? '20px 16px' : '36px 28px' }}>
         {/* Header + progress pips */}
         <div style={{
           display: 'flex', justifyContent: 'space-between',
@@ -209,7 +216,11 @@ export function Step4Compare() {
           borderRadius: 14, padding: 28,
         }}>
           {/* Two comparison cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 20, alignItems: 'center' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr auto 1fr',
+            gap: isMobile ? 8 : 20, alignItems: 'center',
+          }}>
             {/* Left card */}
             <div style={{
               padding: '20px 22px', background: '#fff',
@@ -236,12 +247,14 @@ export function Step4Compare() {
             </div>
 
             {/* VS */}
-            <div style={{
-              width: 32, height: 32, borderRadius: 16,
-              background: 'var(--color-bg)', border: '1px solid var(--color-rule)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--color-muted)', fontSize: 12,
-            }}>vs</div>
+            {!isMobile && (
+              <div style={{
+                width: 32, height: 32, borderRadius: 16,
+                background: 'var(--color-bg)', border: '1px solid var(--color-rule)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--color-muted)', fontSize: 12,
+              }}>vs</div>
+            )}
 
             {/* Right card */}
             <div style={{
@@ -357,8 +370,8 @@ export function Step4Compare() {
         )}
       </div>
 
-      {/* Right sidebar */}
-      <aside style={{
+      {/* Right sidebar – hidden on mobile */}
+      {!isMobile && <aside style={{
         background: 'var(--color-surface)',
         borderLeft: '1px solid var(--color-rule)',
         padding: '28px 24px', overflow: 'auto',
@@ -437,7 +450,7 @@ export function Step4Compare() {
             </div>
           </div>
         )}
-      </aside>
+      </aside>}
     </div>
   );
 }
