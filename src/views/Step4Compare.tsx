@@ -37,7 +37,8 @@ export function Step4Compare() {
   const storedSaaty = mode === 'criteria'
     ? criteriaComparisons[currentSaatyKey]
     : altComparisons[currentSaatyKey];
-  const sliderValue = storedSaaty != null ? Math.round(saatyToSlider(storedSaaty)) : 0;
+  // Negate: visual convention = drag RIGHT → right card wins (AHP stores left-vs-right ratio)
+  const sliderValue = storedSaaty != null ? -Math.round(saatyToSlider(storedSaaty)) : 0;
 
   // Current items
   const leftCritIdx = critPairs[critPairIdx]?.[0] ?? 0;
@@ -67,7 +68,7 @@ export function Step4Compare() {
     : `Alternative ${rightAltIdx + 1}`;
 
   function handleSliderChange(p: number) {
-    const saaty = sliderToSaaty(p);
+    const saaty = sliderToSaaty(-p); // negate: slider right = right wins = left gets 1/saaty
     if (mode === 'criteria') {
       setCriteriaComparison(critPairs[critPairIdx][0], critPairs[critPairIdx][1], saaty);
     } else {
@@ -210,7 +211,7 @@ export function Step4Compare() {
             {/* Left card */}
             <div style={{
               padding: '20px 22px', background: '#fff',
-              border: `1.5px solid ${sliderValue > 0 ? 'var(--color-ink)' : 'var(--color-rule)'}`,
+              border: `1.5px solid ${sliderValue < 0 ? 'var(--color-ink)' : 'var(--color-rule)'}`,
               borderRadius: 12,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
@@ -243,7 +244,7 @@ export function Step4Compare() {
             {/* Right card */}
             <div style={{
               padding: '20px 22px', background: '#fff',
-              border: `1.5px solid ${sliderValue < 0 ? 'var(--color-ink)' : 'var(--color-rule)'}`,
+              border: `1.5px solid ${sliderValue > 0 ? 'var(--color-ink)' : 'var(--color-rule)'}`,
               borderRadius: 12,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>

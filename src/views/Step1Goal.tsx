@@ -82,34 +82,6 @@ export function Step1Goal() {
         />
       </div>
 
-      <div style={{ marginTop: 36 }}>
-        <div style={{
-          fontSize: 12, color: 'var(--color-sub)', fontWeight: 500,
-          textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 12,
-        }}>
-          Or start from a template
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-          {TEMPLATES.map(tmpl => (
-            <div
-              key={tmpl.t}
-              onClick={() => setGoal(tmpl.t)}
-              style={{
-                background: 'var(--color-surface)',
-                border: goal === tmpl.t ? '1.5px solid var(--color-ink)' : '1px solid var(--color-rule)',
-                borderRadius: 10, padding: 14, cursor: 'pointer',
-              }}
-            >
-              <div style={{ fontSize: 18, marginBottom: 6, color: goal === tmpl.t ? 'var(--color-accent)' : 'var(--color-muted)' }}>
-                {tmpl.icon}
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2, color: 'var(--color-ink)' }}>{tmpl.t}</div>
-              <div style={{ fontSize: 12, color: 'var(--color-sub)', lineHeight: 1.4 }}>{tmpl.d}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div style={{ display: 'flex', gap: 10, marginTop: 36 }}>
         <button style={{
           appearance: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13,
@@ -160,36 +132,11 @@ export function Step1Goal() {
         }}>
           Estimated time
         </div>
-        <div style={{ fontSize: 22, fontWeight: 600, marginBottom: 4, fontVariantNumeric: 'tabular-nums' }}>~12 min</div>
+        <div style={{ fontSize: 22, fontWeight: 600, marginBottom: 4, fontVariantNumeric: 'tabular-nums' }}>~5 min</div>
         <div style={{ fontSize: 12, color: 'var(--color-sub)' }}>
           3 alternatives × 4 criteria · 18 pairwise judgments.
         </div>
       </div>
-
-      <div style={{ fontSize: 11, color: 'var(--color-sub)', fontWeight: 600, letterSpacing: 0.5, textTransform: 'uppercase', marginTop: 4, marginBottom: 10 }}>
-        Team
-      </div>
-      {TEAM.map(m => (
-        <div key={m.n} style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          padding: '8px 0', borderBottom: '1px solid var(--color-rule)',
-        }}>
-          <div style={{
-            width: 28, height: 28, borderRadius: 14, background: m.c,
-            color: '#fff', fontSize: 11, fontWeight: 600,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-          }}>
-            {m.n}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 500 }}>{m.name}</div>
-            <div style={{ fontSize: 11, color: 'var(--color-sub)' }}>{m.role}</div>
-          </div>
-          <div style={{ fontSize: 10, color: 'var(--color-muted)', letterSpacing: 0.4, textTransform: 'uppercase' }}>
-            Owner
-          </div>
-        </div>
-      ))}
     </>
   );
 

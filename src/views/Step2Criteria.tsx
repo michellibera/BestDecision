@@ -128,7 +128,6 @@ export function Step2Criteria() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
             }}>+</span>
             <span style={{ fontSize: 13 }}>Add criterion</span>
-            <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--color-muted)' }}>or paste a list</span>
           </div>
         )}
       </div>

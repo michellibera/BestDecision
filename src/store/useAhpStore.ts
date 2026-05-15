@@ -66,15 +66,15 @@ const INITIAL_STATE: AhpState = {
 };
 
 const CRITERION_COLORS = [
-  'oklch(0.92 0.06 60)',
-  'oklch(0.92 0.06 220)',
-  'oklch(0.92 0.06 140)',
-  'oklch(0.92 0.06 350)',
-  'oklch(0.92 0.06 300)',
-  'oklch(0.92 0.06 30)',
-  'oklch(0.92 0.06 190)',
-  'oklch(0.92 0.06 100)',
-  'oklch(0.92 0.06 260)',
+  'oklch(0.92 0.2 60)',
+  'oklch(0.92 0.2 220)',
+  'oklch(0.92 0.2 140)',
+  'oklch(0.92 0.2 350)',
+  'oklch(0.92 0.2 300)',
+  'oklch(0.92 0.2 30)',
+  'oklch(0.92 0.2 190)',
+  'oklch(0.92 0.2 100)',
+  'oklch(0.92 0.2 260)',
 ];
 
 export const useAhpStore = create<AhpStore>()(

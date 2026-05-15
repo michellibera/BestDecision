@@ -22,11 +22,12 @@ export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, valu
   const sliderRef = useRef<HTMLDivElement>(null);
   const pos = ((value + 8) / 16) * 100; // 0–100%
   const saatyVal = Math.abs(value) + 1;  // 1–9
-  const dominant = value > 0 ? leftLabel : value < 0 ? rightLabel : null;
+  const dominant = value > 0 ? rightLabel : value < 0 ? leftLabel : null;
 
+  // value > 0 = handle right = right card wins → fill right side with rightColor
   const fillColor = value > 0
-    ? (leftColor ?? 'oklch(0.92 0.06 60)')
-    : (rightColor ?? 'oklch(0.92 0.06 220)');
+    ? (rightColor ?? 'oklch(0.92 0.06 220)')
+    : (leftColor ?? 'oklch(0.92 0.06 60)');
 
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -111,9 +112,9 @@ export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, valu
         fontSize: 11, color: 'var(--color-sub)', marginTop: 4,
         fontVariantNumeric: 'tabular-nums',
       }}>
-        <span>9 ← {rightLabel} dominates</span>
-        <span>1 · equal</span>
-        <span>{leftLabel} dominates → 9</span>
+        <span>← {leftLabel}</span>
+        <span>equal</span>
+        <span>{rightLabel} →</span>
       </div>
 
       {/* Verbal summary box */}
@@ -140,7 +141,7 @@ export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, valu
           fontSize: 28, fontWeight: 600, color: 'var(--color-ink)',
           fontVariantNumeric: 'tabular-nums', flexShrink: 0, marginLeft: 16,
         }}>
-          {value > 0 ? `${saatyVal}` : value < 0 ? `1/${saatyVal}` : '1'}
+          {value !== 0 ? `${saatyVal}` : '1'}
         </div>
       </div>
     </div>

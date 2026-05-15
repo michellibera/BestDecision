@@ -95,20 +95,6 @@ export function Step5Results() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-          <button style={{
-            appearance: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13,
-            padding: '8px 16px', borderRadius: 8, fontWeight: 500,
-            background: '#fff', color: 'var(--color-ink)', border: '1px solid var(--color-rule)',
-          }}>
-            ↓ Export PDF
-          </button>
-          <button style={{
-            appearance: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13,
-            padding: '8px 16px', borderRadius: 8, fontWeight: 500,
-            background: '#fff', color: 'var(--color-ink)', border: '1px solid var(--color-rule)',
-          }}>
-            Share link
-          </button>
           <button
             onClick={() => { reset(); navigate('/step/1'); }}
             style={{
