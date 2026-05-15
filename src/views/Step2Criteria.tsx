@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useAhpStore, Criterion } from '../store/useAhpStore';
 import { StepLayout } from '../layouts/StepLayout';
+import { useT } from '../i18n/I18nContext';
 
 function nPairs(n: number) { return (n * (n - 1)) / 2; }
 
 export function Step2Criteria() {
   const navigate = useNavigate();
   const { criteria, addCriterion, updateCriterion, removeCriterion } = useAhpStore();
+  const { t } = useT();
 
   const main = (
     <div style={{ maxWidth: 760 }}>
@@ -14,14 +16,13 @@ export function Step2Criteria() {
         fontSize: 12, color: 'var(--color-sub)', fontWeight: 500,
         letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 8,
       }}>
-        Step 2 · Criteria
+        {t('s2Label')}
       </div>
       <h1 style={{ margin: '0 0 8px', fontSize: 28, fontWeight: 600, letterSpacing: -0.5 }}>
-        How will you judge each option?
+        {t('s2Title')}
       </h1>
       <p style={{ margin: '0 0 28px', fontSize: 14, color: 'var(--color-sub)', lineHeight: 1.55 }}>
-        List the dimensions that matter. 3–7 criteria works best — too few oversimplifies, too many
-        dilutes attention. You'll weigh them against each other in step 4.
+        {t('s2Desc')}
       </p>
 
       {/* Criteria table */}
@@ -39,9 +40,9 @@ export function Step2Criteria() {
           background: 'var(--color-bg)',
         }}>
           <span />
-          <span>Name</span>
-          <span>Description</span>
-          <span style={{ textAlign: 'right' }}>Direction</span>
+          <span>{t('s2ColName')}</span>
+          <span>{t('s2ColDesc')}</span>
+          <span style={{ textAlign: 'right' }}>{t('s2ColDir')}</span>
           <span />
         </div>
 
@@ -75,7 +76,7 @@ export function Step2Criteria() {
             <input
               value={c.description}
               onChange={e => updateCriterion(c.id, { description: e.target.value })}
-              placeholder="Short description"
+              placeholder={t('s2ColDesc')}
               style={{
                 background: 'transparent', border: 'none', outline: 'none',
                 fontSize: 13, color: 'var(--color-sub)',
@@ -92,7 +93,7 @@ export function Step2Criteria() {
                   color: c.direction === 'benefit' ? 'var(--color-accent-ink)' : 'oklch(0.50 0.10 30)',
                 }}
               >
-                {c.direction === 'benefit' ? '↑ higher' : '↓ lower'}
+                {c.direction === 'benefit' ? t('s2DirBenefit') : t('s2DirCost')}
               </button>
             </div>
             <div style={{ textAlign: 'right' }}>
@@ -127,7 +128,7 @@ export function Step2Criteria() {
               border: '1px dashed var(--color-rule-strong)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
             }}>+</span>
-            <span style={{ fontSize: 13 }}>Add criterion</span>
+            <span style={{ fontSize: 13 }}>{t('s2AddCriterion')}</span>
           </div>
         )}
       </div>
@@ -143,9 +144,7 @@ export function Step2Criteria() {
           fontSize: 11, fontWeight: 700, flexShrink: 0,
         }}>i</div>
         <div style={{ fontSize: 13, color: 'oklch(0.30 0.08 155)' }}>
-          <strong>{criteria.length} criteria</strong> means{' '}
-          <strong>{nPairs(criteria.length)} pairwise judgments</strong> in step 4.
-          {' '}Keep what's essential.
+          {t('s2CriteriaInfo', { n: criteria.length, m: nPairs(criteria.length) })}
         </div>
       </div>
 
@@ -158,7 +157,7 @@ export function Step2Criteria() {
             background: '#fff', color: 'var(--color-ink)', border: '1px solid var(--color-rule)',
           }}
         >
-          ← Back
+          {t('s2Back')}
         </button>
         <button
           onClick={() => navigate('/step/3')}
@@ -168,7 +167,7 @@ export function Step2Criteria() {
             background: 'var(--color-accent)', color: '#fff', border: 'none',
           }}
         >
-          Continue → Add alternatives
+          {t('s2Continue')}
         </button>
       </div>
     </div>
@@ -180,13 +179,13 @@ export function Step2Criteria() {
         fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
         letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 14,
       }}>
-        Tips
+        {t('s2TipsTitle')}
       </div>
       <ul style={{ margin: 0, padding: 0, listStyle: 'none', fontSize: 13, color: 'var(--color-sub)', lineHeight: 1.55 }}>
         {[
-          { strong: 'Independent.', text: " Each criterion should measure something the others don't." },
-          { strong: 'Comparable.', text: ' All alternatives can be meaningfully scored on it.' },
-          { strong: 'Same level.', text: ' Avoid mixing strategic and tactical concerns.' },
+          { strong: t('s2TipIndStrong'), text: t('s2TipIndText') },
+          { strong: t('s2TipCmpStrong'), text: t('s2TipCmpText') },
+          { strong: t('s2TipLvlStrong'), text: t('s2TipLvlText') },
         ].map(({ strong, text }) => (
           <li key={strong} style={{ paddingLeft: 16, position: 'relative', marginBottom: 10 }}>
             <span style={{ position: 'absolute', left: 0, color: 'var(--color-accent)' }}>•</span>
@@ -201,14 +200,14 @@ export function Step2Criteria() {
           fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
           letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 10,
         }}>
-          Effort
+          {t('s2EffortTitle')}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
-          <span style={{ color: 'var(--color-sub)' }}>Pairwise comparisons</span>
+          <span style={{ color: 'var(--color-sub)' }}>{t('s2PairwiseComp')}</span>
           <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>{nPairs(criteria.length)}</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 6 }}>
-          <span style={{ color: 'var(--color-sub)' }}>Estimated time</span>
+          <span style={{ color: 'var(--color-sub)' }}>{t('s2EstTime')}</span>
           <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
             ~{Math.max(1, Math.round(nPairs(criteria.length) / 2))} min
           </span>
@@ -219,7 +218,7 @@ export function Step2Criteria() {
             height: '100%', background: 'var(--color-accent)', borderRadius: 2,
           }} />
         </div>
-        <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 4 }}>Sweet spot</div>
+        <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 4 }}>{t('s2SweetSpot')}</div>
       </div>
     </>
   );

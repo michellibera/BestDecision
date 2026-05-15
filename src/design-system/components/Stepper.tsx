@@ -1,17 +1,26 @@
 import { Fragment } from 'react';
 import { useAhpStore } from '../../store/useAhpStore';
+import { useT } from '../../i18n/I18nContext';
 
 function nPairs(n: number) { return (n * (n - 1)) / 2; }
 
-const STEP_LABELS = ['Goal', 'Criteria', 'Alternatives', 'Compare', 'Results'];
-
 export function Stepper({ currentStep }: { currentStep: number }) {
   const { criteria, alternatives } = useAhpStore();
+  const { t } = useT();
+
+  const STEP_LABELS = [
+    t('stepGoal'),
+    t('stepCriteria'),
+    t('stepAlternatives'),
+    t('stepCompare'),
+    t('stepResults'),
+  ];
+
   const metas = [
     '',
     `${criteria.length}`,
     `${alternatives.length}`,
-    currentStep > 4 ? 'done' : `0/${nPairs(criteria.length)}`,
+    currentStep > 4 ? t('stepDone') : `0/${nPairs(criteria.length)}`,
     '',
   ];
 

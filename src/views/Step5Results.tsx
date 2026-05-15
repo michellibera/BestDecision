@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAhpStore } from '../store/useAhpStore';
 import { computePriorities, buildMatrix, aggregate, analyzeSensitivity } from '../lib/ahp';
+import { useT } from '../i18n/I18nContext';
 
 const ALT_COLORS = [
   'oklch(0.92 0.06 60)',
@@ -16,6 +17,7 @@ const ALT_COLORS = [
 export function Step5Results() {
   const navigate = useNavigate();
   const { criteria, alternatives, criteriaComparisons, altComparisons, reset } = useAhpStore();
+  const { t } = useT();
 
   const results = useMemo(() => {
     if (criteria.length < 2 || alternatives.length < 2) return null;
@@ -42,8 +44,8 @@ export function Step5Results() {
     return (
       <div style={{ flex: 1, overflow: 'auto', padding: '36px 56px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', paddingTop: 60, textAlign: 'center' }}>
-          <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-ink)' }}>Not enough data</h2>
-          <p style={{ color: 'var(--color-sub)' }}>Please complete the comparisons in step 4 first.</p>
+          <h2 style={{ fontSize: 22, fontWeight: 600, color: 'var(--color-ink)' }}>{t('s5NotEnough')}</h2>
+          <p style={{ color: 'var(--color-sub)' }}>{t('s5CompleteStep4')}</p>
           <button
             onClick={() => navigate('/step/4')}
             style={{
@@ -52,7 +54,7 @@ export function Step5Results() {
               background: 'var(--color-accent)', color: '#fff', border: 'none',
             }}
           >
-            ← Go to comparisons
+            {t('s5GoToComp')}
           </button>
         </div>
       </div>
@@ -81,17 +83,16 @@ export function Step5Results() {
             fontSize: 12, color: 'var(--color-sub)', fontWeight: 500,
             letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 8,
           }}>
-            Step 5 · Results
+            {t('s5Label')}
           </div>
           <h1 style={{ margin: '0 0 6px', fontSize: 32, fontWeight: 600, letterSpacing: -0.6, color: 'var(--color-ink)' }}>
-            The math says:{' '}
+            {t('s5MathSays')}{' '}
             <span style={{ color: 'var(--color-accent)' }}>{winnerAlt?.label}</span>.
           </h1>
           <p style={{ margin: 0, fontSize: 15, color: 'var(--color-sub)', lineHeight: 1.5, maxWidth: 640 }}>
-            {winnerAlt?.label} leads with a score of{' '}
-            <strong style={{ color: 'var(--color-ink)' }}>{(winnerScore * 100).toFixed(1)}%</strong>.
-            {' '}Consistency ratio CR = {results.critCR.toFixed(3)}{' '}
-            {results.critConsistent ? '— judgments are coherent.' : '— consider revising some judgments.'}
+            {t('s5LeadsWith', { winner: winnerAlt?.label ?? '', score: (winnerScore * 100).toFixed(1) })}{' '}
+            {t('s5CrLine', { cr: results.critCR.toFixed(3) })}{' '}
+            {results.critConsistent ? t('s5CrCoherent') : t('s5CrRevise')}
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
@@ -103,7 +104,7 @@ export function Step5Results() {
               background: 'var(--color-accent)', color: '#fff', border: 'none',
             }}
           >
-            Start over
+            {t('s5StartOver')}
           </button>
         </div>
       </div>
@@ -133,7 +134,7 @@ export function Step5Results() {
                   letterSpacing: 0.4, textTransform: 'uppercase',
                   borderBottomLeftRadius: 8,
                 }}>
-                  ★ Recommended
+                  {t('s5Recommended')}
                 </div>
               )}
               <div style={{
@@ -141,7 +142,7 @@ export function Step5Results() {
                 marginBottom: 8, fontVariantNumeric: 'tabular-nums',
                 color: isWinner ? 'rgba(255,255,255,0.6)' : 'var(--color-muted)',
               }}>
-                Rank 0{i + 1}
+                {t('s5RankN', { n: i + 1 })}
               </div>
               <div style={{
                 fontSize: isWinner ? 30 : 20, fontWeight: 600,
@@ -168,7 +169,7 @@ export function Step5Results() {
                 <span style={{ fontSize: 14, color: isWinner ? 'rgba(255,255,255,0.55)' : 'var(--color-muted)' }}>%</span>
                 {!isWinner && i > 0 && (
                   <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--color-muted)', fontVariantNumeric: 'tabular-nums' }}>
-                    −{((final[0].score - score) * 100).toFixed(1)} pts
+                    −{((final[0].score - score) * 100).toFixed(1)}{t('s5PtsSuffix')}
                   </span>
                 )}
               </div>
@@ -201,10 +202,10 @@ export function Step5Results() {
               fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
               letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 4,
             }}>
-              Score breakdown
+              {t('s5ScoreBreakdown')}
             </div>
             <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-ink)' }}>
-              How each criterion contributed
+              {t('s5HowContributed')}
             </div>
           </div>
 
@@ -275,7 +276,7 @@ export function Step5Results() {
               fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
               letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 8,
             }}>
-              Consistency
+              {t('s5Consistency')}
             </div>
             <div style={{
               fontSize: 28, fontWeight: 600,
@@ -287,9 +288,7 @@ export function Step5Results() {
               </span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--color-sub)', lineHeight: 1.5 }}>
-              {results.critConsistent
-                ? 'Within 0.10 threshold. Judgments are coherent — no contradictions.'
-                : 'Above 0.10 threshold. Consider revisiting step 4.'}
+              {results.critConsistent ? t('s5WithinFull') : t('s5AboveFull')}
             </div>
             <div style={{
               height: 6, background: 'var(--color-bg)', borderRadius: 3, marginTop: 12,
@@ -307,7 +306,7 @@ export function Step5Results() {
               fontSize: 10, color: 'var(--color-muted)', marginTop: 4,
               fontVariantNumeric: 'tabular-nums',
             }}>
-              <span>0</span><span>0.10 limit</span>
+              <span>0</span><span>{t('s5LimitLabel')}</span>
             </div>
           </div>
 
@@ -324,9 +323,9 @@ export function Step5Results() {
                 fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
                 letterSpacing: 0.4, textTransform: 'uppercase',
               }}>
-                Sensitivity
+                {t('s5Sensitivity')}
               </div>
-              <span style={{ fontSize: 11, color: 'var(--color-muted)' }}>What if weights shift?</span>
+              <span style={{ fontSize: 11, color: 'var(--color-muted)' }}>{t('s5WhatIfWeights')}</span>
             </div>
 
             {results.sensitivity.sensitivity.map(s => {
@@ -365,8 +364,8 @@ export function Step5Results() {
               borderRadius: 8, fontSize: 12, color: 'oklch(0.30 0.08 155)',
             }}>
               {results.sensitivity.sensitivity.every(s => s.minChangeToPFlipWinner == null)
-                ? <><strong>{winnerAlt?.label} stays #1</strong> across all tested perturbations. The decision is robust.</>
-                : <>Some criteria shifts could change the winner — review sensitivity above.</>
+                ? t('s5StaysFirst', { winner: winnerAlt?.label ?? '' })
+                : t('s5SomeShifts')
               }
             </div>
           </div>
@@ -380,7 +379,7 @@ export function Step5Results() {
               fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
               letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 12,
             }}>
-              Criteria weights
+              {t('s5CriteriaWeights')}
             </div>
             {criteria.map((c, i) => (
               <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: 13 }}>
@@ -409,7 +408,7 @@ export function Step5Results() {
             background: '#fff', color: 'var(--color-ink)', border: '1px solid var(--color-rule)',
           }}
         >
-          ← Edit comparisons
+          {t('s5EditComp')}
         </button>
       </div>
     </div>

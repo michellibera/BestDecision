@@ -1,13 +1,6 @@
 import React, { useRef } from 'react';
-
-function verbal(a: number): string {
-  if (a === 0) return 'Equally important';
-  if (a <= 2) return 'Slightly more important';
-  if (a <= 4) return 'Moderately more important';
-  if (a <= 6) return 'Strongly more important';
-  if (a <= 8) return 'Very strongly more important';
-  return 'Extremely more important';
-}
+import { useT } from '../../i18n/I18nContext';
+import { TranslationKey } from '../../i18n/translations';
 
 interface SaatySliderProps {
   leftLabel: string;
@@ -20,9 +13,20 @@ interface SaatySliderProps {
 
 export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, value = 0, onChange }: SaatySliderProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const { t } = useT();
+
   const pos = ((value + 8) / 16) * 100; // 0–100%
   const saatyVal = Math.abs(value) + 1;  // 1–9
   const dominant = value > 0 ? rightLabel : value < 0 ? leftLabel : null;
+
+  function verbalKey(a: number): TranslationKey {
+    if (a === 0) return 'sliderVerbal0';
+    if (a <= 2) return 'sliderVerbal2';
+    if (a <= 4) return 'sliderVerbal4';
+    if (a <= 6) return 'sliderVerbal6';
+    if (a <= 8) return 'sliderVerbal8';
+    return 'sliderVerbalMax';
+  }
 
   // value > 0 = handle right = right card wins → fill right side with rightColor
   const fillColor = value > 0
@@ -113,7 +117,7 @@ export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, valu
         fontVariantNumeric: 'tabular-nums',
       }}>
         <span>← {leftLabel}</span>
-        <span>equal</span>
+        <span>{t('sliderEqual')}</span>
         <span>{rightLabel} →</span>
       </div>
 
@@ -128,12 +132,12 @@ export function SaatySlider({ leftLabel, rightLabel, leftColor, rightColor, valu
             fontSize: 11, color: 'var(--color-accent-ink)', fontWeight: 600,
             letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 2,
           }}>
-            Your judgment
+            {t('sliderYourJudgment')}
           </div>
           <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-ink)' }}>
             {value === 0
-              ? <>Both are <em>equally important</em>.</>
-              : <><strong>{dominant}</strong>{' is '}<em>{verbal(Math.abs(value)).toLowerCase()}</em>.</>
+              ? <em>{t('sliderBothEqual')}</em>
+              : <><strong>{dominant}</strong>{' '}{t('sliderIsVerb')}{' '}<em>{t(verbalKey(Math.abs(value)))}</em>.</>
             }
           </div>
         </div>

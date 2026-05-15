@@ -1,23 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAhpStore } from '../store/useAhpStore';
 import { StepLayout } from '../layouts/StepLayout';
-
-const TEMPLATES = [
-  { t: 'Vendor selection', d: 'Pick a supplier across cost, quality, risk.', icon: '◐' },
-  { t: 'Hiring decision', d: 'Rank candidates against role criteria.', icon: '◑' },
-  { t: 'Project prioritization', d: 'Sequence initiatives by value & cost.', icon: '◓' },
-];
-
-const TEAM = [
-  { n: 'MR', name: 'Marta R.', role: 'PM', c: 'oklch(0.85 0.08 60)' },
-  { n: 'AK', name: 'Alex K.', role: 'Eng lead', c: 'oklch(0.82 0.08 220)' },
-  { n: 'JT', name: 'Jules T.', role: 'Design', c: 'oklch(0.84 0.08 140)' },
-  { n: 'SD', name: 'Sam D.', role: 'Finance', c: 'oklch(0.83 0.08 350)' },
-];
+import { useT } from '../i18n/I18nContext';
 
 export function Step1Goal() {
   const navigate = useNavigate();
   const { goal, context, setGoal, setContext } = useAhpStore();
+  const { t } = useT();
 
   const main = (
     <div style={{ maxWidth: 720 }}>
@@ -25,21 +14,20 @@ export function Step1Goal() {
         fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, letterSpacing: 0.4,
         textTransform: 'uppercase', marginBottom: 8,
       }}>
-        Step 1 · Define the goal
+        {t('s1Label')}
       </div>
       <h1 style={{ margin: '0 0 12px', fontSize: 30, fontWeight: 600, letterSpacing: -0.6, lineHeight: 1.15 }}>
-        What decision are you making?
+        {t('s1Title')}
       </h1>
       <p style={{ margin: '0 0 32px', fontSize: 15, color: 'var(--color-sub)', lineHeight: 1.55 }}>
-        Frame the question in one sentence. Everything else — criteria, alternatives,
-        comparisons — hangs off this. Be concrete; "pick a vendor" is better than "improve sourcing."
+        {t('s1Desc')}
       </p>
 
       <label style={{
         fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, display: 'block',
         marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.3,
       }}>
-        The question
+        {t('s1QuestionLabel')}
       </label>
       <div style={{
         background: 'var(--color-surface)',
@@ -49,7 +37,7 @@ export function Step1Goal() {
         <input
           value={goal}
           onChange={e => setGoal(e.target.value)}
-          placeholder="e.g. Prioritize Q3 strategic initiatives"
+          placeholder={t('s1QuestionPh')}
           style={{
             width: '100%', background: 'transparent', border: 'none', outline: 'none',
             fontSize: 19, fontWeight: 500, lineHeight: 1.35, color: 'var(--color-ink)',
@@ -62,7 +50,7 @@ export function Step1Goal() {
         fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, display: 'block',
         marginBottom: 6, marginTop: 24, textTransform: 'uppercase', letterSpacing: 0.3,
       }}>
-        Context · optional
+        {t('s1ContextLabel')}
       </label>
       <div style={{
         background: 'var(--color-surface)',
@@ -72,7 +60,7 @@ export function Step1Goal() {
         <textarea
           value={context}
           onChange={e => setContext(e.target.value)}
-          placeholder="Additional background or constraints…"
+          placeholder={t('s1ContextPh')}
           rows={3}
           style={{
             width: '100%', background: 'transparent', border: 'none', outline: 'none',
@@ -88,7 +76,7 @@ export function Step1Goal() {
           padding: '8px 16px', borderRadius: 8, fontWeight: 500,
           background: 'transparent', color: 'var(--color-muted)', border: '1px solid transparent',
         }}>
-          Cancel
+          {t('s1Cancel')}
         </button>
         <button
           onClick={() => navigate('/step/2')}
@@ -101,7 +89,7 @@ export function Step1Goal() {
             opacity: goal.trim() ? 1 : 0.4,
           }}
         >
-          Continue → Define criteria
+          {t('s1Continue')}
         </button>
       </div>
     </div>
@@ -113,16 +101,13 @@ export function Step1Goal() {
         fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
         letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 14,
       }}>
-        What is AHP?
+        {t('s1SidebarTitle')}
       </div>
       <p style={{ fontSize: 13, color: 'var(--color-ink)', lineHeight: 1.6, margin: '0 0 18px' }}>
-        Analytic Hierarchy Process breaks a complex decision into a tree —
-        <strong> goal → criteria → alternatives</strong> — and asks you to compare items
-        in pairs instead of scoring them all at once.
+        {t('s1AhpDesc1')}
       </p>
       <p style={{ fontSize: 13, color: 'var(--color-sub)', lineHeight: 1.6, margin: '0 0 18px' }}>
-        BestDecision guides you through five steps and computes a single ranking, plus a
-        consistency score so you can spot contradictions before committing.
+        {t('s1AhpDesc2')}
       </p>
 
       <div style={{ background: 'var(--color-accent-soft)', borderRadius: 10, padding: 14, marginTop: 8 }}>
@@ -130,11 +115,11 @@ export function Step1Goal() {
           fontSize: 11, color: 'var(--color-accent-ink)', fontWeight: 600,
           letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 4,
         }}>
-          Estimated time
+          {t('s1EstimatedTime')}
         </div>
         <div style={{ fontSize: 22, fontWeight: 600, marginBottom: 4, fontVariantNumeric: 'tabular-nums' }}>~5 min</div>
         <div style={{ fontSize: 12, color: 'var(--color-sub)' }}>
-          3 alternatives × 4 criteria · 18 pairwise judgments.
+          {t('s1EstimatedTimeNote')}
         </div>
       </div>
     </>

@@ -1,25 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import { useAhpStore } from '../../store/useAhpStore';
-
-const TEAM = [
-  { n: 'MR', c: 'oklch(0.85 0.08 60)' },
-  { n: 'AK', c: 'oklch(0.82 0.08 220)' },
-  { n: 'JT', c: 'oklch(0.84 0.08 140)' },
-  { n: 'SD', c: 'oklch(0.83 0.08 350)' },
-];
+import { useT } from '../../i18n/I18nContext';
+import { Lang } from '../../i18n/translations';
 
 interface NavProps {
   currentStep: number;
 }
 
-export function Nav({ currentStep }: NavProps) {
+export function Nav({ currentStep: _currentStep }: NavProps) {
   const navigate = useNavigate();
   const { goal } = useAhpStore();
-  const projectName = goal.trim() || 'New Decision';
-
-  function handleNext() {
-    if (currentStep < 5) navigate(`/step/${currentStep + 1}`);
-  }
+  const { lang, setLang, t } = useT();
+  const projectName = goal.trim() || t('newDecision');
 
   return (
     <div style={{
@@ -30,7 +22,10 @@ export function Nav({ currentStep }: NavProps) {
       padding: '0 28px', gap: 24, flexShrink: 0,
     }}>
       {/* Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div
+        onClick={() => navigate('/step/1')}
+        style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
+      >
         <span style={{ fontWeight: 600, letterSpacing: -0.2, fontSize: 15, color: 'var(--color-ink)' }}>
           BestDecision
         </span>
@@ -45,11 +40,23 @@ export function Nav({ currentStep }: NavProps) {
       </div>
 
       {/* Right side */}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-        {/* Lang switch */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 12, color: 'var(--color-sub)' }}>EN PL</span>
-        </div>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
+        {(['en', 'pl'] as Lang[]).map(l => (
+          <button
+            key={l}
+            onClick={() => setLang(l)}
+            style={{
+              appearance: 'none', fontFamily: 'inherit', cursor: 'pointer',
+              fontSize: 12, fontWeight: lang === l ? 700 : 400,
+              padding: '3px 7px', borderRadius: 5, border: 'none',
+              background: lang === l ? 'var(--color-ink)' : 'transparent',
+              color: lang === l ? '#fff' : 'var(--color-sub)',
+              letterSpacing: 0.3, textTransform: 'uppercase',
+            }}
+          >
+            {l}
+          </button>
+        ))}
       </div>
     </div>
   );

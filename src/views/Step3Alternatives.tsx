@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAhpStore, Alternative } from '../store/useAhpStore';
 import { StepLayout } from '../layouts/StepLayout';
+import { useT } from '../i18n/I18nContext';
 
 function nPairs(n: number) { return (n * (n - 1)) / 2; }
 
@@ -17,6 +18,7 @@ const ALT_COLORS = [
 export function Step3Alternatives() {
   const navigate = useNavigate();
   const { goal, criteria, alternatives, addAlternative, updateAlternative, removeAlternative } = useAhpStore();
+  const { t } = useT();
   const critPairs = nPairs(criteria.length);
   const totalCompares = critPairs + criteria.length * nPairs(alternatives.length);
 
@@ -26,14 +28,13 @@ export function Step3Alternatives() {
         fontSize: 12, color: 'var(--color-sub)', fontWeight: 500,
         letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 8,
       }}>
-        Step 3 · Alternatives
+        {t('s3Label')}
       </div>
       <h1 style={{ margin: '0 0 8px', fontSize: 28, fontWeight: 600, letterSpacing: -0.5 }}>
-        What are you choosing between?
+        {t('s3Title')}
       </h1>
       <p style={{ margin: '0 0 28px', fontSize: 14, color: 'var(--color-sub)', lineHeight: 1.55 }}>
-        The candidate options. They should all be feasible and worth comparing — drop
-        anything you'd never pick before you start judging.
+        {t('s3Desc')}
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
@@ -57,14 +58,14 @@ export function Step3Alternatives() {
                   fontSize: 11, color: 'var(--color-sub)', fontWeight: 500,
                   letterSpacing: 0.3, textTransform: 'uppercase',
                 }}>
-                  Option {i + 1}
+                  {t('s3OptionN', { n: i + 1 })}
                 </div>
               </div>
 
               <input
                 value={a.label}
                 onChange={e => updateAlternative(a.id, { label: e.target.value })}
-                placeholder="Option name"
+                placeholder={t('s3OptionNamePh')}
                 style={{
                   display: 'block', width: '100%', background: 'transparent',
                   border: 'none', outline: 'none',
@@ -75,7 +76,7 @@ export function Step3Alternatives() {
               <input
                 value={a.subtitle}
                 onChange={e => updateAlternative(a.id, { subtitle: e.target.value })}
-                placeholder="Subtitle"
+                placeholder={t('s3SubtitlePh')}
                 style={{
                   display: 'block', width: '100%', background: 'transparent',
                   border: 'none', outline: 'none',
@@ -86,7 +87,7 @@ export function Step3Alternatives() {
               <textarea
                 value={a.description}
                 onChange={e => updateAlternative(a.id, { description: e.target.value })}
-                placeholder="Description…"
+                placeholder={t('s3DescPh')}
                 rows={2}
                 style={{
                   display: 'block', width: '100%', background: 'transparent',
@@ -131,8 +132,8 @@ export function Step3Alternatives() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               marginBottom: 8, fontSize: 18, color: 'var(--color-muted)',
             }}>+</div>
-            <div style={{ fontSize: 13, fontWeight: 500 }}>Add alternative</div>
-            <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 4 }}>up to 7</div>
+            <div style={{ fontSize: 13, fontWeight: 500 }}>{t('s3AddAlt')}</div>
+            <div style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 4 }}>{t('s3UpTo7')}</div>
           </div>
         )}
       </div>
@@ -148,9 +149,7 @@ export function Step3Alternatives() {
           fontSize: 11, fontWeight: 700, flexShrink: 0,
         }}>i</div>
         <div style={{ fontSize: 13, color: 'oklch(0.30 0.08 155)' }}>
-          <strong>{alternatives.length} alternatives × {criteria.length} criteria</strong> means
-          {' '}<strong>{totalCompares} total comparisons</strong> in step 4
-          (plus the {critPairs} criteria comparisons).
+          {t('s3Info', { alts: alternatives.length, crits: criteria.length, total: totalCompares, critPairs })}
         </div>
       </div>
 
@@ -163,7 +162,7 @@ export function Step3Alternatives() {
             background: '#fff', color: 'var(--color-ink)', border: '1px solid var(--color-rule)',
           }}
         >
-          ← Back
+          {t('s3Back')}
         </button>
         <button
           onClick={() => navigate('/step/4')}
@@ -173,7 +172,7 @@ export function Step3Alternatives() {
             background: 'var(--color-accent)', color: '#fff', border: 'none',
           }}
         >
-          Continue → Compare criteria
+          {t('s3Continue')}
         </button>
       </div>
     </div>
@@ -185,13 +184,13 @@ export function Step3Alternatives() {
         fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
         letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 14,
       }}>
-        Hierarchy preview
+        {t('s3HierarchyTitle')}
       </div>
 
       <div style={{ background: 'var(--color-bg)', borderRadius: 10, padding: 16 }}>
-        <div style={{ fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, marginBottom: 6 }}>Goal</div>
+        <div style={{ fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, marginBottom: 6 }}>{t('s3GoalLabel')}</div>
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 16, color: 'var(--color-ink)' }}>
-          {goal || 'Your decision'}
+          {goal || t('s3YourDecision')}
         </div>
         <div style={{ display: 'flex', gap: 4, marginBottom: 16, flexWrap: 'wrap' }}>
           {criteria.map(c => (
@@ -205,7 +204,7 @@ export function Step3Alternatives() {
         </div>
         <div style={{ height: 1, background: 'var(--color-rule)', margin: '0 0 14px' }} />
         <div style={{ fontSize: 12, color: 'var(--color-sub)', fontWeight: 500, marginBottom: 6 }}>
-          Alternatives
+          {t('s3AltsLabel')}
         </div>
         {alternatives.map(a => (
           <div key={a.id} style={{ fontSize: 13, padding: '4px 0', color: 'var(--color-ink)' }}>

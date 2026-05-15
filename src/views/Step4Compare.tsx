@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAhpStore } from '../store/useAhpStore';
 import { SaatySlider } from '../design-system';
 import { computePriorities, buildMatrix, aggregate, findMostInconsistentPair, sliderToSaaty, saatyToSlider } from '../lib/ahp';
+import { useT } from '../i18n/I18nContext';
 
 type CompareMode = 'criteria' | 'alternatives';
 
@@ -17,6 +18,7 @@ function generatePairs(n: number): [number, number][] {
 export function Step4Compare() {
   const navigate = useNavigate();
   const { criteria, alternatives, criteriaComparisons, altComparisons, setCriteriaComparison, setAltComparison } = useAhpStore();
+  const { t } = useT();
 
   const [mode, setMode] = useState<CompareMode>('criteria');
   const [critPairIdx, setCritPairIdx] = useState(0);
@@ -61,11 +63,11 @@ export function Step4Compare() {
   const leftColor = mode === 'criteria' ? criteria[leftCritIdx]?.color : undefined;
   const rightColor = mode === 'criteria' ? criteria[rightCritIdx]?.color : undefined;
   const leftNum = mode === 'criteria'
-    ? `Criterion ${leftCritIdx + 1}`
-    : `Alternative ${leftAltIdx + 1}`;
+    ? t('s4CriterionN', { n: leftCritIdx + 1 })
+    : t('s4AltN', { n: leftAltIdx + 1 });
   const rightNum = mode === 'criteria'
-    ? `Criterion ${rightCritIdx + 1}`
-    : `Alternative ${rightAltIdx + 1}`;
+    ? t('s4CriterionN', { n: rightCritIdx + 1 })
+    : t('s4AltN', { n: rightAltIdx + 1 });
 
   function handleSliderChange(p: number) {
     const saaty = sliderToSaaty(-p); // negate: slider right = right wins = left gets 1/saaty
@@ -162,8 +164,8 @@ export function Step4Compare() {
   }, [criteriaComparisons, criteria]);
 
   const modeLabel = mode === 'criteria'
-    ? `Pairwise comparison · ${donePairs + 1} of ${totalPairs}`
-    : `For "${criteria[altCritIdx]?.label}" · comparison ${donePairs + 1} of ${totalPairs}`;
+    ? t('s4PairwiseLabel', { done: donePairs + 1, total: totalPairs })
+    : t('s4ForCriterion', { criterion: criteria[altCritIdx]?.label ?? '', done: donePairs + 1, total: totalPairs });
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', flex: 1, minHeight: 0 }}>
@@ -183,8 +185,8 @@ export function Step4Compare() {
             </div>
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 600, letterSpacing: -0.5 }}>
               {mode === 'criteria'
-                ? 'Which criterion matters more for this decision?'
-                : `Which option performs better on "${criteria[altCritIdx]?.label}"?`}
+                ? t('s4CritQ')
+                : t('s4AltQ', { criterion: criteria[altCritIdx]?.label ?? '' })}
             </h1>
           </div>
           <div style={{ display: 'flex', gap: 6, flexShrink: 0, marginLeft: 20, marginTop: 4 }}>
@@ -293,7 +295,7 @@ export function Step4Compare() {
               opacity: isFirst ? 0.4 : 1,
             }}
           >
-            ← Previous
+            {t('s4Prev')}
           </button>
           <button
             onClick={handleNext}
@@ -303,7 +305,7 @@ export function Step4Compare() {
               background: 'var(--color-accent)', color: '#fff', border: 'none',
             }}
           >
-            {isLast ? 'View results →' : 'Save and continue →'}
+            {isLast ? t('s4ViewResults') : t('s4SaveContinue')}
           </button>
           <button
             onClick={handleNext}
@@ -313,7 +315,7 @@ export function Step4Compare() {
               background: 'transparent', border: 'none', color: 'var(--color-sub)',
             }}
           >
-            Skip
+            {t('s4Skip')}
           </button>
         </div>
 
@@ -324,7 +326,7 @@ export function Step4Compare() {
               fontSize: 12, color: 'var(--color-sub)', fontWeight: 500,
               marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.3,
             }}>
-              Already judged
+              {t('s4AlreadyJudged')}
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {judgedPairs.slice(-6).map(({ a, b, v }) => (
@@ -346,8 +348,11 @@ export function Step4Compare() {
 
         {inconsistencyHint && (
           <p style={{ fontSize: 11, color: 'var(--color-muted)', marginTop: 12 }}>
-            Hint: reconsider "{criteria[inconsistencyHint.i]?.label}" vs "{criteria[inconsistencyHint.j]?.label}"
-            — suggested ratio {inconsistencyHint.suggestedValue.toFixed(2)}
+            {t('s4Hint', {
+              a: criteria[inconsistencyHint.i]?.label ?? '',
+              b: criteria[inconsistencyHint.j]?.label ?? '',
+              ratio: inconsistencyHint.suggestedValue.toFixed(2),
+            })}
           </p>
         )}
       </div>
@@ -363,7 +368,7 @@ export function Step4Compare() {
           fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
           letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 16,
         }}>
-          Live ranking
+          {t('s4LiveRanking')}
         </div>
 
         {liveResults?.aggResult ? (
@@ -403,7 +408,7 @@ export function Step4Compare() {
           ))
         ) : (
           <p style={{ fontSize: 13, color: 'var(--color-sub)', marginBottom: 18 }}>
-            Complete more comparisons to see ranking.
+            {t('s4CompleteMore')}
           </p>
         )}
 
@@ -417,7 +422,7 @@ export function Step4Compare() {
               fontSize: 11, color: 'var(--color-sub)', fontWeight: 600,
               letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 6,
             }}>
-              Consistency
+              {t('s4Consistency')}
             </div>
             <div style={{ fontSize: 22, fontWeight: 600, fontVariantNumeric: 'tabular-nums', color: 'var(--color-ink)' }}>
               CR{' '}
@@ -427,8 +432,8 @@ export function Step4Compare() {
             </div>
             <div style={{ fontSize: 12, color: 'var(--color-sub)', marginTop: 4 }}>
               {liveResults.critResult.consistent
-                ? 'Within 0.10 threshold — judgments hang together.'
-                : 'Above 0.10 — consider revising some judgments.'}
+                ? t('s4WithinThreshold')
+                : t('s4AboveThreshold')}
             </div>
           </div>
         )}

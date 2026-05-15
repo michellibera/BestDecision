@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { I18nProvider } from './i18n/I18nContext';
 import { AppShell } from './layouts/AppShell';
 import { Step1Goal } from './views/Step1Goal';
 import { Step2Criteria } from './views/Step2Criteria';
@@ -8,6 +9,7 @@ import { Step5Results } from './views/Step5Results';
 
 export function App() {
   return (
+    <I18nProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/step/1" replace />} />
@@ -19,5 +21,6 @@ export function App() {
         <Route path="*" element={<Navigate to="/step/1" replace />} />
       </Routes>
     </BrowserRouter>
+    </I18nProvider>
   );
 }
