@@ -181,7 +181,7 @@ export const translations = {
     s2DirBenefit: '↑ wyżej',
     s2DirCost: '↓ niżej',
     s2AddCriterion: 'Dodaj kryterium',
-    s2CriteriaInfo: '{n} kryteria oznaczają {m} porównań parowych w kroku 4. Zachowaj to, co istotne.',
+    s2CriteriaInfo: '{n} kryteria oznaczają {m} porównań parami w kroku 4. Zachowaj to, co istotne.',
     s2TipsTitle: 'Wskazówki',
     s2TipIndStrong: 'Niezależne.',
     s2TipIndText: ' Każde kryterium powinno mierzyć coś, czego inne nie mierzą.',
@@ -215,7 +215,7 @@ export const translations = {
     s3Continue: 'Kontynuuj → Porównaj kryteria',
 
     // Step 4
-    s4PairwiseLabel: 'Porównanie parowe · {done} z {total}',
+    s4PairwiseLabel: 'Porównanie parami · {done} z {total}',
     s4ForCriterion: 'Dla „{criterion}" · porównanie {done} z {total}',
     s4CritQ: 'Które kryterium jest ważniejsze dla tej decyzji?',
     s4AltQ: 'Która opcja wypada lepiej w zakresie „{criterion}"?',
